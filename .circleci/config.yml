@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: kmpartner/node-kubernetes2
     environment:
       IMAGE_NAME: kmpartner/node-kubernetes2
     working_directory: /home/node/app
