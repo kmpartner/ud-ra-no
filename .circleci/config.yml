@@ -1,17 +1,28 @@
 version: 2.1
-orbs:
-  node: circleci/node@1.1.6
 jobs:
-  build-and-test:
-    executor:
-      name: node/default
+  build:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    environment:
+      IMAGE_NAME: kmpartner/node-kubernetes2
+    working_directory: /home/node/app
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm test
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $IMAGE_NAME:latest .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
 workflows:
-    build-and-test:
-      jobs:
-        - build-and-test
+  version: 2
+  build-master:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
