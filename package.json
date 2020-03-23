@@ -1,15 +1,14 @@
 {
   "name": "rest-api-udemy",
   "version": "1.0.0",
-  "description": "",
+  "description": "rest-api-udemy",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "kmpartner",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
