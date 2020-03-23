@@ -61,7 +61,7 @@ app.use('/auth', authRoutes);
 
 //// test /xxx
 app.use('/xxx', (req, res, next) => {
-  console.log('in /xxx');
+  console.log('in /xxx ...');
   res.send('<h1>Hello from Express /xxx </h1>')
 })
 

@@ -49,7 +49,7 @@ spec:
             secretKeyRef:
               name: ud-restapi-nodejs-secrets
               key: JWT_KEY
-        image: kmpartner/node-kubernetes2
+        image: kmpartner/node-kubernetes2:$COMMIT_SHA1
         name: nodejs
         ports:
         - containerPort: 8083
