@@ -2,10 +2,10 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: kmpartner/node-kubernetes2
+      - image: circleci/buildpack-deps:stretch
     environment:
       IMAGE_NAME: kmpartner/node-kubernetes2
-    working_directory: /home/node/app
+    working_directory: ~/app
     steps:
       - checkout
       - setup_remote_docker
