@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: nodejs
+  name: ud-restapi-nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: nodejs
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: nodejs
+    spec:
+      containers:
+      - env:
+        - name: MONGO_DB
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_DB
+              name: ud-restapi-nodejs-configmap
+        - name: MONGO_HOSTNAME
+          value: db
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ud-restapi-nodejs-secrets
+              key: MONGO_PASSWORD
+        - name: MONGO_PORT
+          valueFrom:
+            configMapKeyRef:
+              key: MONGO_PORT
+              name: ud-restapi-nodejs-configmap
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: ud-restapi-nodejs-secrets
+              key: MONGO_USERNAME
+        - name: JWT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ud-restapi-nodejs-secrets
+              key: JWT_KEY
+        image: kmpartner/node-kubernetes2
+        name: nodejs
+        ports:
+        - containerPort: 8083
+        # - containerPort: 8084
+        readinessProbe:
+          tcpSocket:
+            port: 8083
+          initialDelaySeconds: 10
+          periodSeconds: 60
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8083
+          initialDelaySeconds: 60
+          failureThreshold: 3
+          periodSeconds: 60
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8083
+          failureThreshold: 60
+          periodSeconds: 10
+        volumeMounts:
+        - mountPath: /home/node/app/images
+          name: ud-restapi-nodejs-claim0
+        resources:
+          requests:
+            memory: "1Mi"
+            cpu: "1m"
+          limits:
+            memory: "200Mi"
+            cpu: "100m"
+      restartPolicy: Always
+      volumes:
+      - name: ud-restapi-nodejs-claim0
+        persistentVolumeClaim:
+          claimName: ud-restapi-nodejs-claim0
+      # initContainers:
+      # - name: init-db
+      #   image: busybox
+      #   command: ['sh', '-c', 'until nc -z db:27017; do echo waiting for db; sleep 2; done;']
+      restartPolicy: Always
+status: {}
