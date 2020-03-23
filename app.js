@@ -66,7 +66,7 @@ app.use('/xxx', (req, res, next) => {
 })
 
 app.use('/healthz', (req, res, next) => {
-    console.log('in /xxx');
+    console.log('in /healthz');
     res.send('<h3> /healthz </h3>')
   })
 
