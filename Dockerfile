@@ -1,5 +1,7 @@
 FROM node:10-alpine
 
+RUN apk add --no-cache gettext librsvg ghostscript imagemagick graphicsmagick ffmpeg
+
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
 WORKDIR /home/node/app
@@ -12,6 +14,6 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-EXPOSE 8083
+EXPOSE 8083 8084
 
 CMD [ "node", "app.js" ]

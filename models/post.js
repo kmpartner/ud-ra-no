@@ -10,6 +10,14 @@ const postSchema = Schema({
         type: String,
         required: true
     },
+    modifiedImageUrl: {
+        type: String,
+        // required: true
+    },
+    thumbnailImageUrl: {
+        type: String,
+        // required: true
+    },
     content: {
         type: String,
         required: true
@@ -23,10 +31,10 @@ const postSchema = Schema({
         type: String,
         // required: true
     },
-    // public: {
-    //     type: Boolean,
-    //     // required: true
-    // }
+    public: {
+        type: Boolean,
+        // required: true
+    }
 }, 
 { timestamps: true }
 );

@@ -25,6 +25,7 @@ const fileFilter = (req, file, cb) => {
         file.mimetype === 'image/png' ||
         file.mimetype === 'image/jpg' ||
         file.mimetype === 'image/jpeg' || 
+        file.mimetype === 'image/webp' ||
         file.mimetype === 'video/mp4' ||
         file.mimetype === 'video/webm' 
     ) {
@@ -34,13 +35,11 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+const multerLimits = { fileSize: 1024 * 1024 * 3 };
+
 const app = express();
 
 app.use(bodyParser.json()); //application/json
-app.use(
-    multer({ storage: fileStorage, fileFilter: fileFilter}).single('image')
-);
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -48,6 +47,14 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization' );
     next();
 })
+
+app.use(multer({ 
+        storage: fileStorage, 
+        limits: multerLimits, 
+        fileFilter: fileFilter}).single('image')
+);
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
